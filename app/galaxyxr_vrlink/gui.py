@@ -128,7 +128,7 @@ class App(tk.Tk):
         else:
             self.set_row("driver", False, "not installed")
         self.set_row("registered", s.driver_registered, "registered with SteamVR (vrpathreg)" if s.driver_registered else ("other copies registered: " + "; ".join(s.registered_paths) if s.registered_paths else "not registered"))
-        self.set_row("settings", s.vrlink_settings_applied, "render 3552x3840, 10-bit applied" if s.vrlink_settings_applied else "not applied (vrlink defaults 2048x2048 unless set)")
+        self.set_row("settings", s.vrlink_settings_applied, "render 3552x3840 applied" if s.vrlink_settings_applied else "not applied (vrlink defaults 2048x2048 unless set)")
         ls = s.last_session
         if ls.get("model"):
             ok = ls.get("model_class") == 1 and not ls.get("controller_error")

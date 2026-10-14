@@ -18,7 +18,7 @@ The headset side is the Morphe Steam Link patch that sends the Galaxy XR identit
 - **Install / Update driver**: copies `driver/galaxyxr` to `%LOCALAPPDATA%\GalaxyXR\VRLink\driver\galaxyxr`
   and registers it with `vrpathreg adddriver`. No administrator rights, nothing is written into the
   SteamVR folder, so SteamVR updates cannot remove it. Stale registrations of older copies are removed.
-- **Apply vrlink settings**: writes render size 3552x3840 and 10-bit into `driver_vrlink` in
+- **Apply vrlink settings**: writes render size 3552x3840 into `driver_vrlink` in
   `steamvr.vrsettings` with a backup. Needed because the vrlink builds tested (SteamVR 2.18.3)
   ignore the vendor `vrlink_<model>` section that the driver also ships. Restore puts the previous
   values back.

@@ -18,13 +18,12 @@ STATE_FILE = APP_DIR / "state.json"
 
 # vrlink keys the resource-only driver cannot supply because vrlink ignores vendor sections
 # in the SteamVR builds tested (2.18.3 / 1791582248). Written to the user settings on request.
+# 10-bit is not forced: vrlink's own default (10bit=true) already selects it when the GPU can encode it.
 VRLINK_USER_KEYS = {
     "renderWidth": 3552,
     "renderHeight": 3840,
     "overrideRenderWidth": 3552,
     "overrideRenderHeight": 3840,
-    "force10bit": True,
-    "10bit": True,
 }
 
 
@@ -130,7 +129,7 @@ def uninstall(info: steamvr.SteamVRInfo) -> InstallResult:
 
 
 def apply_vrlink_settings(info: steamvr.SteamVRInfo) -> InstallResult:
-    """Write the vrlink user keys (render size, 10-bit) with a backup. SteamVR must be closed."""
+    """Write the vrlink user keys (render size) with a backup. SteamVR must be closed."""
     running = steamvr.steamvr_running()
     if running:
         return InstallResult(False, [f"Close SteamVR first (running: {', '.join(running)})."])
