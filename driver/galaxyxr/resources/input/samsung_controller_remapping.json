@@ -2,14 +2,6 @@
   "to_controller_type": "samsung_touch",
   "layouts": [
     {
-      "priority": 100,
-      "from_controller_type": "oculus_touch",
-      "simulate_controller_type": true,
-      "simulate_render_model": false,
-      "simulate_HMD": false,
-      "remappings": []
-    },
-    {
       "priority": 20,
       "from_controller_type": "knuckles",
       "simulate_controller_type": true,
