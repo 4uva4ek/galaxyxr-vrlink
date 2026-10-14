@@ -1,6 +1,7 @@
 name: release
 on:
   push:
+    branches: [main]
     tags: ['v*']
   workflow_dispatch:
 permissions:
@@ -29,7 +30,7 @@ jobs:
           path: |
             dist/*.zip
             dist/*.sha256
-      - name: Publish release
+      - name: Publish versioned release (tag push)
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
@@ -37,3 +38,28 @@ jobs:
             dist/*.zip
             dist/*.sha256
           generate_release_notes: true
+      # Rolling release from main: one release per VERSION, re-uploaded (clobber) on
+      # every later main push so `releases/latest` always serves the newest main build.
+      # Native `gh` does not expand shell globs, so the dist files are enumerated here.
+      - name: Publish rolling release (main push)
+        if: github.ref == 'refs/heads/main'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $v = (Get-Content VERSION -Raw).Trim()
+          $tag = "v$v"
+          $sha = $env:GITHUB_SHA
+          $notes = "Auto-built from main ($($sha.Substring(0,7)), $sha) - version $v"
+          $assets = @(Get-ChildItem -Path dist -File |
+              Where-Object { $_.Name -like '*.zip' -or $_.Name -like '*.sha256' } |
+              ForEach-Object { $_.FullName })
+          if ($assets.Count -eq 0) { throw "no release artifacts in dist/" }
+          gh release view $tag --json tagName *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release edit $tag --notes $notes
+          } else {
+            gh release create $tag --title $tag --notes $notes --target $sha
+          }
+          gh release upload $tag @assets --clobber
+          Write-Host "published $tag"
