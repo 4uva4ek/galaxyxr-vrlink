@@ -41,41 +41,5 @@
         "recommendedRenderHeight": 3840,
         "minStreamFormatWidth": 1024,
         "maxStreamFormatWidth": 1536
-    },
-    "vrlink_xrvst2ue_controller_left": {
-        "modelNumber": "Galaxy XR Controller (Left)",
-        "serialNumber": "VRLINKGALAXYXR_Controller_Left",
-        "trackingSystemName": "SamsungVST",
-        "renderModelName": "{galaxyxr}/rendermodels/vst_controller_left",
-        "inputProfilePath": "{galaxyxr}/input/galaxy_xr_controller_profile.json",
-        "controllerType": "galaxy_xr_controller",
-        "providesOffsetOverride": false
-    },
-    "vrlink_xrvst2ue_controller_right": {
-        "modelNumber": "Galaxy XR Controller (Right)",
-        "serialNumber": "VRLINKGALAXYXR_Controller_Right",
-        "trackingSystemName": "SamsungVST",
-        "renderModelName": "{galaxyxr}/rendermodels/vst_controller_right",
-        "inputProfilePath": "{galaxyxr}/input/galaxy_xr_controller_profile.json",
-        "controllerType": "galaxy_xr_controller",
-        "providesOffsetOverride": false
-    },
-    "vrlink_Galaxy XR_controller_left": {
-        "modelNumber": "Galaxy XR Controller (Left)",
-        "serialNumber": "VRLINKGALAXYXR_Controller_Left",
-        "trackingSystemName": "SamsungVST",
-        "renderModelName": "{galaxyxr}/rendermodels/vst_controller_left",
-        "inputProfilePath": "{galaxyxr}/input/galaxy_xr_controller_profile.json",
-        "controllerType": "galaxy_xr_controller",
-        "providesOffsetOverride": false
-    },
-    "vrlink_Galaxy XR_controller_right": {
-        "modelNumber": "Galaxy XR Controller (Right)",
-        "serialNumber": "VRLINKGALAXYXR_Controller_Right",
-        "trackingSystemName": "SamsungVST",
-        "renderModelName": "{galaxyxr}/rendermodels/vst_controller_right",
-        "inputProfilePath": "{galaxyxr}/input/galaxy_xr_controller_profile.json",
-        "controllerType": "galaxy_xr_controller",
-        "providesOffsetOverride": false
     }
 }
