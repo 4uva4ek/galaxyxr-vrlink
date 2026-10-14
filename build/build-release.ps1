@@ -53,7 +53,8 @@ Invoke-Native $py @(
     '--distpath', (Join-Path $dist 'exe'), '--workpath', (Join-Path $root 'build\pyi'), '--specpath', (Join-Path $root 'build\pyi'),
     '--add-data', ((Join-Path $root 'driver') + ';driver'),
     '--add-data', ((Join-Path $root 'VERSION') + ';.'),
-    (Join-Path $root 'app\galaxyxr_vrlink\__main__.py')
+    '--paths', (Join-Path $root 'app'),
+    (Join-Path $root 'app\launcher.py')
 ) 'PyInstaller'
 $exe = Join-Path $dist 'exe\GalaxyXR-VRLink-Setup.exe'
 if (-not (Test-Path $exe)) { throw "PyInstaller did not produce $exe" }
