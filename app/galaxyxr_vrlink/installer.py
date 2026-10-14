@@ -31,7 +31,8 @@ VRLINK_USER_KEYS = {
 def bundled_driver_dir() -> Path:
     """Driver payload shipped next to the app (PyInstaller bundle or source checkout)."""
     base = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[2]))
-    for cand in (base / "driver" / steamvr.DRIVER_NAME, base / steamvr.DRIVER_NAME):
+    # driver/galaxyxr/ is the layout; driver/ (flat) is accepted for the 0.1.0 zip.
+    for cand in (base / "driver" / steamvr.DRIVER_NAME, base / steamvr.DRIVER_NAME, base / "driver"):
         if (cand / "driver.vrdrivermanifest").exists():
             return cand
     raise FileNotFoundError("bundled driver folder not found")

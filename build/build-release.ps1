@@ -14,7 +14,9 @@ $venv = Join-Path $root '.venv'
 #   Windows, Python  3.14+:  <venv>\Scripts\python.exe
 #   Unix:                   <venv>\bin\python
 function Find-VenvPython([string]$VenvDir) {
-    $candidates = if ($IsWindows) {
+    # $IsWindows does not exist in Windows PowerShell 5.1; fall back to the OS variable.
+    $onWindows = ($IsWindows -eq $true) -or ($env:OS -eq 'Windows_NT')
+    $candidates = if ($onWindows) {
         @((Join-Path $VenvDir 'Scripts\python.exe'), (Join-Path $VenvDir 'python.exe'))
     } else {
         @((Join-Path $VenvDir 'bin/python'))

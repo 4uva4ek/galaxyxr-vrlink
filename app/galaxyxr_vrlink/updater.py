@@ -85,9 +85,12 @@ def apply_driver_update(info: steamvr.SteamVRInfo, zip_path: Path) -> installer.
     with zipfile.ZipFile(zip_path) as z:
         names = z.namelist()
         prefix = None
-        for n in names:
-            if n.endswith("driver/galaxyxr/driver.vrdrivermanifest"):
-                prefix = n[: -len("driver.vrdrivermanifest")]
+        for marker in ("driver/galaxyxr/driver.vrdrivermanifest", "driver/driver.vrdrivermanifest"):
+            for n in names:
+                if n.endswith(marker):
+                    prefix = n[: -len("driver.vrdrivermanifest")]
+                    break
+            if prefix is not None:
                 break
         if prefix is None:
             return installer.InstallResult(False, ["Release zip has no driver/galaxyxr folder."])
