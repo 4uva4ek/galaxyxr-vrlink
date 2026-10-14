@@ -1,0 +1,47 @@
+{
+    "jsonid": "vrresources",
+    "statusicons": {
+        "Galaxy XR": {
+            "Prop_NamedIconPathDeviceOff_String": "{galaxyxr}/icons/galaxy_xr/headset_galaxy_xr_status_off.png",
+            "Prop_NamedIconPathDeviceSearching_String": "{galaxyxr}/icons/galaxy_xr/headset_galaxy_xr_status_searching.gif",
+            "Prop_NamedIconPathDeviceSearchingAlert_String": "{galaxyxr}/icons/galaxy_xr/headset_galaxy_xr_status_searching_alert.gif",
+            "Prop_NamedIconPathDeviceReady_String": "{galaxyxr}/icons/galaxy_xr/headset_galaxy_xr_status_ready.png",
+            "Prop_NamedIconPathDeviceReadyAlert_String": "{galaxyxr}/icons/galaxy_xr/headset_galaxy_xr_status_ready_alert.png",
+            "Prop_NamedIconPathDeviceNotReady_String": "{galaxyxr}/icons/galaxy_xr/headset_galaxy_xr_status_error.png",
+            "Prop_NamedIconPathDeviceStandby_String": "{galaxyxr}/icons/galaxy_xr/headset_galaxy_xr_status_standby.png",
+            "Prop_NamedIconPathDeviceStandbyAlert_String": "{galaxyxr}/icons/galaxy_xr/headset_galaxy_xr_status_standby_alert.png",
+            "Prop_NamedIconPathDeviceAlertLow_String": "{galaxyxr}/icons/galaxy_xr/headset_galaxy_xr_status_ready_low.png"
+        },
+        "HMD": {
+            "Alias": "Galaxy XR"
+        },
+        "LeftController": {
+            "Alias": "Galaxy XR (Left Controller)"
+        },
+        "RightController": {
+            "Alias": "Galaxy XR (Right Controller)"
+        },
+        "Galaxy XR (Left Controller)": {
+            "Prop_NamedIconPathDeviceOff_String": "{galaxyxr}/icons/galaxy_xr/left_galaxy_xr_status_off.png",
+            "Prop_NamedIconPathDeviceSearching_String": "{galaxyxr}/icons/galaxy_xr/left_galaxy_xr_status_searching.gif",
+            "Prop_NamedIconPathDeviceSearchingAlert_String": "{galaxyxr}/icons/galaxy_xr/left_galaxy_xr_status_searching_alert.gif",
+            "Prop_NamedIconPathDeviceReady_String": "{galaxyxr}/icons/galaxy_xr/left_galaxy_xr_status_ready.png",
+            "Prop_NamedIconPathDeviceReadyAlert_String": "{galaxyxr}/icons/galaxy_xr/left_galaxy_xr_status_ready_alert.png",
+            "Prop_NamedIconPathDeviceNotReady_String": "{galaxyxr}/icons/galaxy_xr/left_galaxy_xr_status_error.png",
+            "Prop_NamedIconPathDeviceStandby_String": "{galaxyxr}/icons/galaxy_xr/left_galaxy_xr_status_standby.png",
+            "Prop_NamedIconPathDeviceStandbyAlert_String": "{galaxyxr}/icons/galaxy_xr/left_galaxy_xr_status_standby_alert.png",
+            "Prop_NamedIconPathDeviceAlertLow_String": "{galaxyxr}/icons/galaxy_xr/left_galaxy_xr_status_ready_low.png"
+        },
+        "Galaxy XR (Right Controller)": {
+            "Prop_NamedIconPathDeviceOff_String": "{galaxyxr}/icons/galaxy_xr/right_galaxy_xr_status_off.png",
+            "Prop_NamedIconPathDeviceSearching_String": "{galaxyxr}/icons/galaxy_xr/right_galaxy_xr_status_searching.gif",
+            "Prop_NamedIconPathDeviceSearchingAlert_String": "{galaxyxr}/icons/galaxy_xr/right_galaxy_xr_status_searching_alert.gif",
+            "Prop_NamedIconPathDeviceReady_String": "{galaxyxr}/icons/galaxy_xr/right_galaxy_xr_status_ready.png",
+            "Prop_NamedIconPathDeviceReadyAlert_String": "{galaxyxr}/icons/galaxy_xr/right_galaxy_xr_status_ready_alert.png",
+            "Prop_NamedIconPathDeviceNotReady_String": "{galaxyxr}/icons/galaxy_xr/right_galaxy_xr_status_error.png",
+            "Prop_NamedIconPathDeviceStandby_String": "{galaxyxr}/icons/galaxy_xr/right_galaxy_xr_status_standby.png",
+            "Prop_NamedIconPathDeviceStandbyAlert_String": "{galaxyxr}/icons/galaxy_xr/right_galaxy_xr_status_standby_alert.png",
+            "Prop_NamedIconPathDeviceAlertLow_String": "{galaxyxr}/icons/galaxy_xr/right_galaxy_xr_status_ready_low.png"
+        }
+    }
+}

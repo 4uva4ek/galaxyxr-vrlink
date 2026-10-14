@@ -1,0 +1,333 @@
+{
+ "components": {
+  "base": {
+   "component_local": {
+    "origin": [
+     0.0034,
+     -0.0034,
+     0.1491
+    ],
+    "rotate_xyz": [
+     -0.4,
+     -180.0,
+     0.0
+    ]
+   }
+  },
+  "body": {
+   "component_local": {
+    "origin": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "rotate_xyz": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "filename": "R_body.obj"
+  },
+  "button_a": {
+   "component_local": {
+    "origin": [
+     -0.007962,
+     -0.001571,
+     0.051248
+    ],
+    "rotate_xyz": [
+     53.0,
+     0.0,
+     7.0
+    ]
+   },
+   "filename": "R_lowerButton.obj",
+   "motion": {
+    "axis": [
+     0.1,
+     -0.79,
+     0.6
+    ],
+    "controller_button": 2,
+    "pressed_path": "/input/a/click",
+    "type": "translate",
+    "value_mapping": [
+     0.0,
+     0.0025
+    ]
+   }
+  },
+  "button_b": {
+   "component_local": {
+    "origin": [
+     -0.014621,
+     -0.009721,
+     0.041563
+    ],
+    "rotate_xyz": [
+     52.987,
+     -1.383,
+     5.9575
+    ]
+   },
+   "filename": "R_upperButton.obj",
+   "motion": {
+    "axis": [
+     0.1,
+     -0.79,
+     0.6
+    ],
+    "controller_button": 1,
+    "pressed_path": "/input/b/click",
+    "type": "translate",
+    "value_mapping": [
+     0.0,
+     0.0025
+    ]
+   }
+  },
+  "button_enter": {
+   "component_local": {
+    "origin": [
+     0.008135,
+     0.0008,
+     0.056668
+    ],
+    "rotate_xyz": [
+     53.0,
+     0.0,
+     7.0
+    ]
+   },
+   "filename": "R_homeButton.obj",
+   "motion": {
+    "axis": [
+     0.1,
+     -0.79,
+     0.6
+    ],
+    "controller_button": 0,
+    "pressed_path": "/input/system/click",
+    "type": "translate",
+    "value_mapping": [
+     0.0,
+     0.00127
+    ]
+   }
+  },
+  "button_grip": {
+   "component_local": {
+    "origin": [
+     -0.017197,
+     -0.00387,
+     0.086592
+    ],
+    "rotate_xyz": [
+     0.0,
+     263.0,
+     7.0
+    ]
+   },
+   "filename": "R_grip.obj",
+   "motion": {
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "controller_axis": 2,
+    "controller_axis_component": 0,
+    "pivot": [
+     0.000325,
+     -0.058975,
+     0.077072
+    ],
+    "trigger_path": "/input/grip",
+    "type": "rotate",
+    "value_mapping": [
+     0.0,
+     -5.0
+    ]
+   }
+  },
+  "grip": {
+   "component_local": {
+    "origin": [
+     -0.002469,
+     0.003,
+     0.097
+    ],
+    "rotate_xyz": [
+     5.037,
+     -0.0,
+     0.0
+    ]
+   }
+  },
+  "hand_anchor": {
+   "component_local": {
+    "origin": [
+     -0.0,
+     0.0,
+     0.0
+    ],
+    "rotate_xyz": [
+     0.0,
+     -0.0,
+     -0.0
+    ]
+   }
+  },
+  "handgrip": {
+   "component_local": {
+    "origin": [
+     -0.002469,
+     0.003,
+     0.097
+    ],
+    "rotate_xyz": [
+     5.037,
+     -0.0,
+     0.0
+    ]
+   }
+  },
+  "openxr_aim": {
+   "component_local": {
+    "origin": [
+     -0.007,
+     -0.03894766,
+     0.00949694
+    ],
+    "rotate_xyz": [
+     -39.4,
+     -0.0,
+     0.0
+    ]
+   }
+  },
+  "openxr_grip": {
+   "component_local": {
+    "origin": [
+     -0.007,
+     -0.000242,
+     0.098076
+    ],
+    "rotate_xyz": [
+     20.6,
+     -0.0,
+     0.0
+    ]
+   }
+  },
+  "openxr_handmodel": {
+   "component_local": {
+    "origin": [
+     0.01125,
+     -0.00182941,
+     0.1019482
+    ],
+    "rotate_xyz": [
+     -39.4,
+     -0.0,
+     0.0
+    ]
+   }
+  },
+  "thumbstick": {
+   "component_local": {
+    "origin": [
+     0.005219,
+     -0.003704,
+     0.034426
+    ],
+    "rotate_xyz": [
+     53.0,
+     0.0,
+     7.0
+    ]
+   },
+   "filename": "R_thumbStick.obj",
+   "motion": {
+    "center": [
+     0.006411,
+     -0.013745,
+     0.043667
+    ],
+    "component_path": "/input/joystick",
+    "controller_axis": 0,
+    "joystick_rotation_x": [
+     8,
+     -8
+    ],
+    "joystick_rotation_y": [
+     8,
+     -8
+    ],
+    "press_translate": [
+     0.0,
+     -0.000944,
+     0.000716
+    ],
+    "rotate_xyz": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "type": "joystick"
+   }
+  },
+  "tip": {
+   "component_local": {
+    "origin": [
+     -0.011811,
+     -0.030531,
+     0.020703
+    ],
+    "rotate_xyz": [
+     -37.4,
+     -0.0,
+     0.0
+    ]
+   }
+  },
+  "trigger": {
+   "component_local": {
+    "origin": [
+     -0.012068,
+     -0.040945,
+     0.05076
+    ],
+    "rotate_xyz": [
+     315.0,
+     0.0,
+     0.0
+    ]
+   },
+   "filename": "R_trigger.obj",
+   "motion": {
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "controller_axis": 1,
+    "controller_axis_component": 0,
+    "pivot": [
+     0.0031,
+     -0.0287,
+     0.040629
+    ],
+    "pressed_value_override": -20.0,
+    "trigger_path": "/input/trigger",
+    "type": "rotate",
+    "value_mapping": [
+     0.0,
+     -18.0
+    ]
+   }
+  }
+ },
+ "thumbnail": "vst_controller_right_thumbnail.png"
+}
