@@ -4,3 +4,5 @@ build/pyi/
 __pycache__/
 *.pyc
 *.spec
+.venv-linux/
+build/pyi-linux/

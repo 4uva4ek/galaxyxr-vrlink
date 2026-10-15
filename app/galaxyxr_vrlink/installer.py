@@ -11,7 +11,10 @@ from pathlib import Path
 
 from . import steamvr
 
-APP_DIR = Path(os.environ.get("LOCALAPPDATA", "")) / "GalaxyXR" / "VRLink"
+if steamvr.IS_WINDOWS:
+    APP_DIR = Path(os.environ.get("LOCALAPPDATA", "")) / "GalaxyXR" / "VRLink"
+else:
+    APP_DIR = Path(os.environ.get("XDG_DATA_HOME") or Path.home() / ".local" / "share") / "GalaxyXR" / "VRLink"
 INSTALL_DIR = APP_DIR / "driver" / steamvr.DRIVER_NAME
 BACKUP_DIR = APP_DIR / "backups"
 STATE_FILE = APP_DIR / "state.json"
@@ -70,7 +73,7 @@ class InstallResult:
 
 
 def install(info: steamvr.SteamVRInfo, source: Path | None = None) -> InstallResult:
-    """Copy the driver to %LOCALAPPDATA% and register it with vrpathreg. Idempotent."""
+    """Copy the driver to APP_DIR (per-user, no admin) and register it with vrpathreg. Idempotent."""
     msgs: list[str] = []
     if info.root is None:
         return InstallResult(False, ["SteamVR not found."])

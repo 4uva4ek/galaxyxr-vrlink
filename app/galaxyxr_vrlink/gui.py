@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import os
 import subprocess
+import sys
 import threading
 import tkinter as tk
 import webbrowser
@@ -11,6 +12,14 @@ from tkinter import messagebox, ttk
 from . import installer, status, steamvr, updater
 
 TITLE = "Galaxy XR VRLink Setup"
+
+
+def open_path(path) -> None:
+    """Open a file or folder with the desktop's default handler."""
+    if sys.platform == "win32":
+        os.startfile(path)  # noqa: S606
+    else:
+        subprocess.Popen(["open" if sys.platform == "darwin" else "xdg-open", str(path)])  # noqa: S603,S607
 
 
 class App(tk.Tk):
@@ -28,7 +37,7 @@ class App(tk.Tk):
         pad = {"padx": 10, "pady": 4}
         top = ttk.Frame(self)
         top.pack(fill="x", **pad)
-        ttk.Label(top, text=TITLE, font=("Segoe UI", 14, "bold")).pack(side="left")
+        ttk.Label(top, text=TITLE, font=("Segoe UI" if sys.platform == "win32" else "Helvetica", 14, "bold")).pack(side="left")
         ttk.Label(top, text=f"v{self.app_version}").pack(side="right")
 
         self.status_box = ttk.LabelFrame(self, text="Status")
@@ -162,13 +171,13 @@ class App(tk.Tk):
     def on_open_log(self) -> None:
         info = steamvr.discover()
         if info.log_dir and (info.log_dir / "driver_vrlink.txt").exists():
-            os.startfile(info.log_dir / "driver_vrlink.txt")  # noqa: S606
+            open_path(info.log_dir / "driver_vrlink.txt")
         else:
             messagebox.showinfo(TITLE, "driver_vrlink.txt not found.")
 
     def on_open_folder(self) -> None:
         installer.APP_DIR.mkdir(parents=True, exist_ok=True)
-        subprocess.Popen(["explorer", str(installer.APP_DIR)])  # noqa: S603,S607
+        open_path(installer.APP_DIR)
 
     def on_check_updates(self) -> None:
         def work():

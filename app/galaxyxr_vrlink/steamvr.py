@@ -1,17 +1,18 @@
-"""SteamVR discovery, vrpathreg registration, process checks and settings access (Windows)."""
+"""SteamVR discovery, vrpathreg registration, process checks and settings access (Windows, Linux)."""
 from __future__ import annotations
 
 import json
 import os
 import re
 import subprocess
-import winreg
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
 DRIVER_NAME = "galaxyxr"
 VRLINK_SECTION = "driver_vrlink"
 STEAMVR_PROCESSES = ("vrserver", "vrmonitor", "vrcompositor", "vrdashboard", "vrwebhelper", "vrstartup")
+IS_WINDOWS = sys.platform == "win32"
 
 
 @dataclass
@@ -26,15 +27,31 @@ class SteamVRInfo:
 
 
 def _steam_path() -> Path | None:
-    try:
-        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Valve\Steam") as k:
-            return Path(winreg.QueryValueEx(k, "SteamPath")[0])
-    except OSError:
-        return None
+    if IS_WINDOWS:
+        import winreg
+
+        try:
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Valve\Steam") as k:
+                return Path(winreg.QueryValueEx(k, "SteamPath")[0])
+        except OSError:
+            return None
+    # Native Steam on Linux; ~/.steam/steam and ~/.steam/root are symlinks to the real install.
+    home = Path.home()
+    for c in (home / ".local" / "share" / "Steam", home / ".steam" / "steam", home / ".steam" / "root"):
+        if (c / "steamapps").is_dir():
+            return c.resolve()
+    return None
 
 
 def openvrpaths_file() -> Path:
-    return Path(os.environ.get("LOCALAPPDATA", "")) / "openvr" / "openvrpaths.vrpath"
+    if IS_WINDOWS:
+        return Path(os.environ.get("LOCALAPPDATA", "")) / "openvr" / "openvrpaths.vrpath"
+    return Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config") / "openvr" / "openvrpaths.vrpath"
+
+
+def _vrpathreg_in(root: Path) -> Path:
+    # On Linux the .sh wrapper sets up the SteamVR runtime environment before running linux64/vrpathreg.
+    return root / "bin" / "win64" / "vrpathreg.exe" if IS_WINDOWS else root / "bin" / "vrpathreg.sh"
 
 
 def read_openvrpaths() -> dict:
@@ -57,12 +74,12 @@ def discover() -> SteamVRInfo:
     if steam:
         candidates.append(steam / "steamapps" / "common" / "SteamVR")
     for c in candidates:
-        if (c / "bin" / "win64" / "vrpathreg.exe").exists():
+        if _vrpathreg_in(c).exists():
             info.root = c
-            info.vrpathreg = c / "bin" / "win64" / "vrpathreg.exe"
+            info.vrpathreg = _vrpathreg_in(c)
             break
     if info.root is None:
-        info.errors.append("SteamVR not found (no runtime in openvrpaths.vrpath and no Steam registry path).")
+        info.errors.append("SteamVR not found (no runtime in openvrpaths.vrpath and no Steam install found).")
         return info
     cfg = paths.get("config", []) or []
     info.config_dir = Path(cfg[0]) if cfg else (steam / "config" if steam else None)
@@ -75,22 +92,29 @@ def discover() -> SteamVRInfo:
     return info
 
 
-def steamvr_running() -> list[str]:
-    try:
-        out = subprocess.run(["tasklist", "/FO", "CSV", "/NH"], capture_output=True, text=True, timeout=20).stdout
-    except (OSError, subprocess.SubprocessError):
-        return []
+def _process_names() -> list[str]:
+    if IS_WINDOWS:
+        try:
+            out = subprocess.run(["tasklist", "/FO", "CSV", "/NH"], capture_output=True, text=True, timeout=20).stdout
+        except (OSError, subprocess.SubprocessError):
+            return []
+        return [m.group(1) for m in (re.match(r'"([^"]+)\.exe"', line, re.I) for line in out.splitlines()) if m]
     names = []
-    for line in out.splitlines():
-        m = re.match(r'"([^"]+)\.exe"', line, re.I)
-        if m and m.group(1).lower() in STEAMVR_PROCESSES:
-            names.append(m.group(1).lower())
-    return sorted(set(names))
+    for d in Path("/proc").glob("[0-9]*"):
+        try:
+            names.append((d / "comm").read_text().strip())
+        except OSError:
+            continue
+    return names
+
+
+def steamvr_running() -> list[str]:
+    return sorted({n.lower() for n in _process_names() if n.lower() in STEAMVR_PROCESSES})
 
 
 def vrpathreg(info: SteamVRInfo, *args: str) -> tuple[int, str]:
     if not info.vrpathreg:
-        return 1, "vrpathreg.exe not found"
+        return 1, "vrpathreg not found"
     try:
         r = subprocess.run([str(info.vrpathreg), *args], capture_output=True, text=True, timeout=30)
     except (OSError, subprocess.SubprocessError) as e:

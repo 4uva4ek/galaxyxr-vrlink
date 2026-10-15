@@ -8,28 +8,52 @@ permissions:
   contents: write
 jobs:
   build:
-    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            platform: windows-x64
+          - os: ubuntu-latest
+            platform: linux-x64
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Build release zip
-        shell: pwsh
-        run: ./build/build-release.ps1
       - name: Check version matches tag
         if: startsWith(github.ref, 'refs/tags/v')
-        shell: pwsh
+        shell: bash
         run: |
-          $v = (Get-Content VERSION -Raw).Trim()
-          if ("v$v" -ne "${{ github.ref_name }}") { throw "VERSION $v does not match tag ${{ github.ref_name }}" }
+          v="$(tr -d '[:space:]' < VERSION)"
+          [ "v$v" = "${{ github.ref_name }}" ] || { echo "VERSION $v does not match tag ${{ github.ref_name }}"; exit 1; }
+      - name: Build release zip (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./build/build-release.ps1
+      - name: Build release zip (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: ./build/build-release.sh
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: galaxyxr-vrlink
+          name: galaxyxr-vrlink-${{ matrix.platform }}
           path: |
             dist/*.zip
             dist/*.sha256
+
+  publish:
+    needs: build
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: galaxyxr-vrlink-*
+          path: dist
+          merge-multiple: true
       - name: Publish versioned release (tag push)
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
@@ -40,26 +64,23 @@ jobs:
           generate_release_notes: true
       # Rolling release from main: one release per VERSION, re-uploaded (clobber) on
       # every later main push so `releases/latest` always serves the newest main build.
-      # Native `gh` does not expand shell globs, so the dist files are enumerated here.
       - name: Publish rolling release (main push)
         if: github.ref == 'refs/heads/main'
-        shell: pwsh
+        shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          $v = (Get-Content VERSION -Raw).Trim()
-          $tag = "v$v"
-          $sha = $env:GITHUB_SHA
-          $notes = "Auto-built from main ($($sha.Substring(0,7)), $sha) - version $v"
-          $assets = @(Get-ChildItem -Path dist -File |
-              Where-Object { $_.Name -like '*.zip' -or $_.Name -like '*.sha256' } |
-              ForEach-Object { $_.FullName })
-          if ($assets.Count -eq 0) { throw "no release artifacts in dist/" }
-          gh release view $tag --json tagName *> $null
-          if ($LASTEXITCODE -eq 0) {
-            gh release edit $tag --notes $notes
-          } else {
-            gh release create $tag --title $tag --notes $notes --target $sha
-          }
-          gh release upload $tag @assets --clobber
-          Write-Host "published $tag"
+          set -euo pipefail
+          v="$(tr -d '[:space:]' < VERSION)"
+          tag="v$v"
+          notes="Auto-built from main (${GITHUB_SHA:0:7}, $GITHUB_SHA) - version $v"
+          shopt -s nullglob
+          assets=(dist/*.zip dist/*.sha256)
+          [ ${#assets[@]} -gt 0 ] || { echo "no release artifacts in dist/"; exit 1; }
+          if gh release view "$tag" --json tagName > /dev/null 2>&1; then
+            gh release edit "$tag" --notes "$notes"
+          else
+            gh release create "$tag" --title "$tag" --notes "$notes" --target "$GITHUB_SHA"
+          fi
+          gh release upload "$tag" "${assets[@]}" --clobber
+          echo "published $tag"

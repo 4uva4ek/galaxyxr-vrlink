@@ -17,7 +17,8 @@ from . import installer, steamvr
 GITHUB_REPO = "4uva4ek/galaxyxr-vrlink"  # owner/repo
 API = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 USER_AGENT = "galaxyxr-vrlink-updater"
-ASSET_RE = re.compile(r"^galaxyxr-vrlink-(\d+\.\d+\.\d+)-windows-x64\.zip$")
+PLATFORM_TAG = "windows-x64" if steamvr.IS_WINDOWS else "linux-x64"
+ASSET_RE = re.compile(rf"^galaxyxr-vrlink-(\d+\.\d+\.\d+)-{PLATFORM_TAG}\.zip$")
 
 
 @dataclass
@@ -38,14 +39,11 @@ def check(current: str) -> Release | None:
     with urllib.request.urlopen(req, timeout=15) as r:
         data = json.loads(r.read().decode("utf-8"))
     version = str(data.get("tag_name", "")).lstrip("v")
-    asset_url = None
-    sha_url = None
-    for a in data.get("assets", []):
-        name = a.get("name", "")
-        if ASSET_RE.match(name):
-            asset_url = a.get("browser_download_url")
-        elif name.endswith(".sha256"):
-            sha_url = a.get("browser_download_url")
+    urls = {a.get("name", ""): a.get("browser_download_url") for a in data.get("assets", [])}
+    asset_name = next((n for n in urls if ASSET_RE.match(n)), None)
+    asset_url = urls.get(asset_name) if asset_name else None
+    # Releases carry one zip per platform; the checksum file is named after its zip.
+    sha_url = urls.get(f"{asset_name}.sha256") if asset_name else None
     if not asset_url or _vt(version) <= _vt(current):
         return None
     sha = None

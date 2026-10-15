@@ -16,6 +16,7 @@ The headset side is the Morphe Steam Link patch that sends the Galaxy XR identit
   vrpathreg registration, vrlink user settings, and what the last headset session reported
   (model, resource root, render target, 10-bit, controller errors).
 - **Install / Update driver**: copies `driver/galaxyxr` to `%LOCALAPPDATA%\GalaxyXR\VRLink\driver\galaxyxr`
+  (Linux: `~/.local/share/GalaxyXR/VRLink/driver/galaxyxr`, honouring `XDG_DATA_HOME`)
   and registers it with `vrpathreg adddriver`. No administrator rights, nothing is written into the
   SteamVR folder, so SteamVR updates cannot remove it. Stale registrations of older copies are removed.
 - **Apply vrlink settings**: writes render size 3552x3840 into `driver_vrlink` in
@@ -29,6 +30,8 @@ All actions that change files require SteamVR to be closed; the app refuses othe
 
 ## Install
 
+### Windows
+
 1. Download `galaxyxr-vrlink-<version>-windows-x64.zip` from Releases and extract it anywhere.
 2. Close SteamVR, run `GalaxyXR-VRLink-Setup.exe`, press **Install / Update driver**, then
    **Apply vrlink settings**.
@@ -36,6 +39,29 @@ All actions that change files require SteamVR to be closed; the app refuses othe
    must show model `Galaxy XR` and resource root `galaxyxr`.
 
 Command line: `GalaxyXR-VRLink-Setup.exe --status`, `--install`, `--uninstall`.
+
+### Linux
+
+Native (non-Flatpak) Steam with SteamVR for Linux. SteamVR's own `bin/vrpathreg.sh` is used for
+registration and `~/.config/openvr/openvrpaths.vrpath` for discovery.
+
+1. Download `galaxyxr-vrlink-<version>-linux-x64.zip` from Releases and extract it with `unzip`
+   (keeps the executable bit; otherwise `chmod +x GalaxyXR-VRLink-Setup`).
+2. Close SteamVR, run `./GalaxyXR-VRLink-Setup`, then proceed as on Windows.
+
+Command line: `./GalaxyXR-VRLink-Setup --status`, `--install`, `--uninstall`.
+
+From a source checkout no build is needed (Python 3.11+; the GUI needs tkinter, Arch `tk`,
+Debian/Ubuntu `python3-tk`; the command line works without it):
+
+```
+python3 app/launcher.py --status
+python3 app/launcher.py --install
+python3 app/launcher.py
+```
+
+Flatpak Steam is not supported: its sandbox does not see `~/.local/share` and runs
+`vrpathreg` inside the sandbox.
 
 ## Driver contents
 
@@ -54,6 +80,8 @@ section is not consumed, hence the user-settings step.
 
 ## Build
 
-`build\build-release.ps1` creates a venv, runs PyInstaller and produces the release zip and its
-`.sha256`. The GitHub workflow does the same on tags `v*` and attaches both files to the release.
+`build\build-release.ps1` (Windows) and `build/build-release.sh` (Linux) create a venv, run
+PyInstaller and produce the platform release zip and its `.sha256`. The GitHub workflow builds both
+on Windows and Linux runners and attaches all files to the release; the updater picks the zip for
+its own platform.
 Set `GITHUB_REPO` in `app/galaxyxr_vrlink/updater.py` to the published repository.
