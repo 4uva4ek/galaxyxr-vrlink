@@ -7,6 +7,7 @@ import sys
 import threading
 import tkinter as tk
 import webbrowser
+from pathlib import Path
 from tkinter import messagebox, ttk
 
 from . import installer, status, steamvr, updater
@@ -26,11 +27,20 @@ class App(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
         self.title(TITLE)
+        self._set_icon()
         self.geometry("720x560")
         self.minsize(640, 480)
         self.app_version = installer.bundled_version()
         self._build()
         self.after(100, self.refresh)
+
+    def _set_icon(self) -> None:
+        icon = Path(__file__).with_name("icon.png")
+        try:
+            self._icon = tk.PhotoImage(file=str(icon))
+            self.iconphoto(True, self._icon)
+        except tk.TclError:
+            pass  # missing or unreadable icon must not stop the setup tool
 
     # ---------- layout ----------
     def _build(self) -> None:

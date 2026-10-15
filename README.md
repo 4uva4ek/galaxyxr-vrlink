@@ -1,3 +1,5 @@
+<img src="assets/icon.svg" width="96" alt="">
+
 # Galaxy XR VRLink Setup
 
 PC side of native Samsung Galaxy XR support in SteamVR through Steam Link, without a custom

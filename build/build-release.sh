@@ -27,6 +27,7 @@ mkdir -p "$dist"
     --distpath "$dist/exe-linux" --workpath "$root/build/pyi-linux" --specpath "$root/build/pyi-linux" \
     --add-data "$root/driver:driver" \
     --add-data "$root/VERSION:." \
+    --add-data "$root/app/galaxyxr_vrlink/icon.png:galaxyxr_vrlink" \
     --paths "$root/app" \
     "$root/app/launcher.py"
 exe="$dist/exe-linux/GalaxyXR-VRLink-Setup"

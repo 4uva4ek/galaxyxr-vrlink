@@ -53,6 +53,8 @@ Invoke-Native $py @(
     '--distpath', (Join-Path $dist 'exe'), '--workpath', (Join-Path $root 'build\pyi'), '--specpath', (Join-Path $root 'build\pyi'),
     '--add-data', ((Join-Path $root 'driver') + ';driver'),
     '--add-data', ((Join-Path $root 'VERSION') + ';.'),
+    '--add-data', ((Join-Path $root 'app\galaxyxr_vrlink\icon.png') + ';galaxyxr_vrlink'),
+    '--icon', (Join-Path $root 'assets\icon.ico'),
     '--paths', (Join-Path $root 'app'),
     (Join-Path $root 'app\launcher.py')
 ) 'PyInstaller'
