@@ -1,4 +1,4 @@
-<img src="assets/icon.svg" width="96" alt="">
+<img src="app/galaxyxr_vrlink/icon.png" width="96" alt="">
 
 # Galaxy XR VRLink Setup
 
